@@ -308,41 +308,39 @@
                                     <th scope="col">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row" class="col-md-1">
-                                            <input type="text" class="form-control" id="sno" name="sno" placeholder="Sno." required>
-                                        </th>
-                                        <td class="col-md-3">
-                                            <input type="text" class="form-control" id="testItems" name="testItems" placeholder="Test Items" required>
-                                        </td>
-                                        <td class="col-md-1">
-                                            <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Qty" required>
-                                        </td>
-                                        <td class="col-md-1">
-                                            <input type="text" class="form-control" id="unitPrice" name="unitPrice" placeholder="Unit Price" required>
-                                        </td>
-                                        <td class="col-md-1">
-                                            <input type="text" class="form-control" id="price" name="price" placeholder="Price" required>
-                                        </td>
-                                        <td class="col-md-1">
-                                            <input type="text" class="form-control" id="discountPercentage" name="discountPercentage" placeholder="Disc.%" required>
-                                        </td>
-                                        <td class="col-md-1">
-                                            <input type="text" class="form-control" id="discountAmount" name="discountAmount" placeholder="Disc. Amnt" required>
-                                        </td>
+                                <tr id="row1">
+    <th scope="row" class="col-md-1">
+        <input type="text" class="form-control sno" name="sno" placeholder="Sno." required>
+    </th>
+    <td class="col-md-3">
+        <input type="text" class="form-control testItems" name="testItems" placeholder="Test Items" required>
+    </td>
+    <td class="col-md-1">
+        <input type="text" class="form-control quantity" name="quantity" placeholder="Qty" required>
+    </td>
+    <td class="col-md-1">
+        <input type="text" class="form-control unitPrice" name="unitPrice" placeholder="Unit Price" required>
+    </td>
+    <td class="col-md-1">
+        <input type="text" class="form-control price" name="price" placeholder="Price" required>
+    </td>
+    <td class="col-md-1">
+        <input type="text" class="form-control discountPercentage" name="discountPercentage" placeholder="Disc.%" required>
+    </td>
+    <td class="col-md-1">
+        <input type="text" class="form-control discountAmount" name="discountAmount" placeholder="Disc. Amnt" required>
+    </td>
+    <td class="col-md-1">
+        <input type="text" class="form-control subTotal" name="subTotal" placeholder="Sub Total" required>
+    </td>
+    <td>
+        <div class="d-flex">
+            <a href="#" class="btn btn-secondary btn-sm me-1 addRowBtn"><i class="fa fa-plus"></i>Add</a>
+            <a href="#" class="btn btn-danger btn-sm removeRowBtn"><i class="fa fa-plus"></i>Remove</a>
+        </div>
+    </td>
+</tr>
 
-                                        <td class="col-md-1">
-                                            <input type="text" class="form-control" id="subTotal" name="subTotal" placeholder="Sub Total" required>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex">
-                                                <a href="#" class="btn btn-secondary btn-sm me-1" id="addRowBtn"><i class="fa fa-plus"></i>Add</a>
-                                                <a href="#" class="btn btn-danger btn-sm " id="removeRowBtn"><i class="fa fa-plus"></i>Remove</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
                                 <thead>
                                     <tr>
                                     <th scope="col">Sno.</th>

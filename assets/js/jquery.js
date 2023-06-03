@@ -354,9 +354,9 @@ $(document).on("click", "#billing", function (e) {
 
 $(document).ready(function () {
 	var rowCounter = 1; // Counter variable for generating unique IDs
+
 	// Add button click event
-	$("#addRowBtn").click(function () {
-		// alert("Add row");
+	$(document).on("click", ".addRowBtn", function () {
 		var lastRow = $("table tbody tr:last");
 		var newRow = lastRow.clone();
 
@@ -367,42 +367,48 @@ $(document).ready(function () {
 		// Increment the row counter
 		rowCounter++;
 
-		lastRow.before(newRow); // Append the new row after the last row
-		lastRow.find("input").val(""); // Clear input values in the new row
+		newRow.find("input").val(""); // Clear input values in the new row
+		lastRow.after(newRow); // Append the new row after the last row
 	});
 
 	// Remove button click event
-	$("#removeRowBtn").click(function () {
+	$(document).on("click", ".removeRowBtn", function () {
 		var rowCount = $("table tbody tr").length;
 		if (rowCount > 1) {
-			$("table tbody tr:first").remove(); // Remove the last row
+			$(this).closest("tr").remove(); // Remove the current row
 		}
 	});
 
-	$(document).on("keyup", "#quantity, #unitPrice", function () {
-		var quantity = parseFloat($("#quantity").val());
-		var unitPrice = parseFloat($("#unitPrice").val());
+	// Keyup event for calculating price
+	$(document).on("keyup", "input.quantity, input.unitPrice", function () {
+		var row = $(this).closest("tr");
+		var quantity = parseFloat(row.find(".quantity").val());
+		var unitPrice = parseFloat(row.find(".unitPrice").val());
 		if (!isNaN(quantity) && !isNaN(unitPrice)) {
 			var price = quantity * unitPrice;
-			$("#price").val(price.toFixed(2));
+			row.find(".price").val(price.toFixed(2));
 		}
 	});
 
+	// Keyup event for calculating subtotal
 	$(document).on(
 		"keyup",
-		"#quantity, #unitPrice, #discountPercentage",
+		"input.quantity, input.unitPrice, input.discountPercentage",
 		function () {
-			var quantity = parseFloat($("#quantity").val());
-			var unitPrice = parseFloat($("#unitPrice").val());
-			var discountPercentage = parseFloat($("#discountPercentage").val());
+			var row = $(this).closest("tr");
+			var quantity = parseFloat(row.find(".quantity").val());
+			var unitPrice = parseFloat(row.find(".unitPrice").val());
+			var discountPercentage = parseFloat(
+				row.find(".discountPercentage").val()
+			);
 			if (!isNaN(quantity) && !isNaN(unitPrice) && !isNaN(discountPercentage)) {
 				var price = quantity * unitPrice;
 				var discountAmount = price * (discountPercentage / 100);
 				var subtotal = price - discountAmount;
 
-				$("#price").val(price.toFixed(2));
-				$("#discountAmount").val(discountAmount.toFixed(2));
-				$("#subTotal").val(subtotal.toFixed(2));
+				row.find(".price").val(price.toFixed(2));
+				row.find(".discountAmount").val(discountAmount.toFixed(2));
+				row.find(".subTotal").val(subtotal.toFixed(2));
 			}
 		}
 	);
