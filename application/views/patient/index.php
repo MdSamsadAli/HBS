@@ -291,66 +291,46 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label for="validationCustom01" class="form-label">Billing Date</label>
-                                    <input type="date" class="form-control" id="patientId" name="patientId" placeholder="Billing Date" >
+                                    <input type="text" class="form-control" id="datetime" name="datetime" placeholder="Billing Date" >
                                 </div>
                             </form>
                             <table class="table">
                                 <thead>
                                     <tr>
-                                    <th scope="col">Sno.</th>
                                     <th scope="col">Test Items</th>
                                     <th scope="col">Quantity</th>
                                     <th scope="col">Unit Price</th>
                                     <th scope="col">Price</th>
-                                    <th scope="col">Discount Percentage</th>
-                                    <th scope="col">Discount Amount</th>
-                                    <th scope="col">Sub Total</th>
                                     <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tr id="row1">
-    <th scope="row" class="col-md-1">
-        <input type="text" class="form-control sno" name="sno" placeholder="Sno." required>
-    </th>
-    <td class="col-md-3">
-        <input type="text" class="form-control testItems" name="testItems" placeholder="Test Items" required>
-    </td>
-    <td class="col-md-1">
-        <input type="text" class="form-control quantity" name="quantity" placeholder="Qty" required>
-    </td>
-    <td class="col-md-1">
-        <input type="text" class="form-control unitPrice" name="unitPrice" placeholder="Unit Price" required>
-    </td>
-    <td class="col-md-1">
-        <input type="text" class="form-control price" name="price" placeholder="Price" required>
-    </td>
-    <td class="col-md-1">
-        <input type="text" class="form-control discountPercentage" name="discountPercentage" placeholder="Disc.%" required>
-    </td>
-    <td class="col-md-1">
-        <input type="text" class="form-control discountAmount" name="discountAmount" placeholder="Disc. Amnt" required>
-    </td>
-    <td class="col-md-1">
-        <input type="text" class="form-control subTotal" name="subTotal" placeholder="Sub Total" required>
-    </td>
-    <td>
-        <div class="d-flex">
-            <a href="#" class="btn btn-secondary btn-sm me-1 addRowBtn"><i class="fa fa-plus"></i>Add</a>
-            <a href="#" class="btn btn-danger btn-sm removeRowBtn"><i class="fa fa-plus"></i>Remove</a>
-        </div>
-    </td>
-</tr>
+                                    <td>
+                                        <input type="text" class="form-control testItems" name="testItems" id="testItems" placeholder="Test Items" required>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control quantity" name="quantity" id="quantity" placeholder="Qty" required>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control unitPrice" name="unitPrice" id="unitPrice" placeholder="Unit Price" required>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control price" name="price" id="price" placeholder="Price" required>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <a href="#" class="btn btn-secondary btn-sm me-1 addRowBtn"><i class="fa fa-plus"></i>Add</a>
+                                            <a href="#" class="btn btn-danger btn-sm removeRowBtn"><i class="fa fa-plus"></i>Remove</a>
+                                        </div>
+                                    </td>
+                                </tr>
 
                                 <thead>
                                     <tr>
-                                    <th scope="col">Sno.</th>
                                     <th scope="col">Test Items</th>
                                     <th scope="col">Quantity</th>
                                     <th scope="col">Unit Price</th>
                                     <th scope="col">Price</th>
-                                    <th scope="col">Discount Percentage</th>
-                                    <th scope="col">Discount Amount</th>
-                                    <th scope="col">Sub Total</th>
                                     <th scope="col">Action</th>
                                     </tr>
                                 </thead>
@@ -360,42 +340,45 @@
                                 <div class="row justify-content-end">
                                     <div class="col-sm-6">
                                         <form>
-
                                             <div class="form-group row mb-3">
-                                                <label for="inputEmail3" class="col-sm-4 col-form-label">Total Discount Percent</label>
+                                                <label for="inputEmail3" class="col-sm-4 col-form-label">Sub Total</label>
                                                 <div class="col-sm-8">
-                                                    <input type="text" class="form-control" id="name" name="name" placeholder="Discount Price" required>
+                                                    <input type="text" class="form-control" id="grandTotal" name="grandTotal" placeholder="Sub Total" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mb-3">
+                                                <label for="inputEmail3" class="col-sm-4 col-form-label">Discount Percent</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" id="DiscountPercent" name="DiscountPercent" placeholder="Discount Percent">
                                                 </div>
                                             </div>
 
                                             <div class="form-group row mb-3">
-                                                <label for="inputEmail3" class="col-sm-4 col-form-label">Total Discount Amount</label>
+                                                <label for="inputEmail3" class="col-sm-4 col-form-label">Discount Amount</label>
                                                 <div class="col-sm-8">
-                                                    <input type="text" class="form-control" id="name" name="name" placeholder="Discount Amount" required>
+                                                    <input type="text" class="form-control" id="DiscountAmount" name="DiscountAmount" placeholder="Discount Amount" readonly>
                                                 </div>
                                             </div>
 
                                             <div class="form-group row mb-3">
-                                                <label for="inputEmail3" class="col-sm-4 col-form-label">Grand Total</label>
+                                                <label for="inputEmail3" class="col-sm-4 col-form-label">Net Total</label>
                                                 <div class="col-sm-8">
-                                                    <input type="text" class="form-control" id="name" name="name" placeholder="Grand Total" required>
+                                                    <input type="text" class="form-control" id="netTotal" name="netTotal" placeholder="Net Total" readonly>
                                                 </div>
                                             </div>
+
                                         </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" id="storerecord">Register</button>
+                            <button type="button" class="btn btn-primary" id="saveTestItems">Save</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
-
         <script src="assets/js/jquery.js"></script>
     </body>
 </html>

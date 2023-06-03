@@ -52,4 +52,12 @@ class patientModel extends CI_Model {
         $query = $this->db->get();
         return $query->row();
     }
+    public function getId($id)
+    {
+        $this->db->select("datetime, patientid");
+        $this->db->from('patients');
+        $this->db->where('patientid', $id);
+        $query = $this->db->get();
+        return $query->row();
+    }
 }

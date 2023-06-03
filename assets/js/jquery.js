@@ -1,3 +1,4 @@
+// form validation
 $(document).ready(function () {
 	$("#form").validate();
 
@@ -347,13 +348,28 @@ $("#district").change(function () {
 $(document).on("click", "#billing", function (e) {
 	e.preventDefault();
 	var id = $(this).attr("value");
-	// alert(id);
+	alert(id);
+
+	$.ajax({
+		url: "patient/getPatientId",
+		data: { id: id },
+		dataType: "json",
+		type: "POST",
+		success: function (data) {
+			console.log(data);
+			$("#patientId").val(data.patientid).prop("readonly", true);
+			$("#datetime").val(data.datetime).prop("readonly", true);
+		},
+	});
 
 	$("#billModal").modal("show");
 });
 
+// add button clone and remove button and all the mathematical calculation
 $(document).ready(function () {
+	$("#DiscountPercent").val(0);
 	var rowCounter = 1; // Counter variable for generating unique IDs
+	toggleRemoveButton();
 
 	// Add button click event
 	$(document).on("click", ".addRowBtn", function () {
@@ -369,18 +385,22 @@ $(document).ready(function () {
 
 		newRow.find("input").val(""); // Clear input values in the new row
 		lastRow.after(newRow); // Append the new row after the last row
+		toggleRemoveButton();
 	});
 
 	// Remove button click event
 	$(document).on("click", ".removeRowBtn", function () {
 		var rowCount = $("table tbody tr").length;
+		// console.log(rowCount);
 		if (rowCount > 1) {
 			$(this).closest("tr").remove(); // Remove the current row
+			toggleRemoveButton();
+			calculateTotal();
 		}
 	});
 
 	// Keyup event for calculating price
-	$(document).on("keyup", "input.quantity, input.unitPrice", function () {
+	$(document).on("keyup", "input.quantity, #unitPrice", function () {
 		var row = $(this).closest("tr");
 		var quantity = parseFloat(row.find(".quantity").val());
 		var unitPrice = parseFloat(row.find(".unitPrice").val());
@@ -388,28 +408,76 @@ $(document).ready(function () {
 			var price = quantity * unitPrice;
 			row.find(".price").val(price.toFixed(2));
 		}
+		calculateTotal();
 	});
 
-	// Keyup event for calculating subtotal
-	$(document).on(
-		"keyup",
-		"input.quantity, input.unitPrice, input.discountPercentage",
-		function () {
-			var row = $(this).closest("tr");
-			var quantity = parseFloat(row.find(".quantity").val());
-			var unitPrice = parseFloat(row.find(".unitPrice").val());
-			var discountPercentage = parseFloat(
-				row.find(".discountPercentage").val()
-			);
-			if (!isNaN(quantity) && !isNaN(unitPrice) && !isNaN(discountPercentage)) {
-				var price = quantity * unitPrice;
-				var discountAmount = price * (discountPercentage / 100);
-				var subtotal = price - discountAmount;
+	// Event handler for keyup event on discount percent input
+	$("#DiscountPercent").on("keyup", function () {
+		calculateTotal();
+	});
+});
 
-				row.find(".price").val(price.toFixed(2));
-				row.find(".discountAmount").val(discountAmount.toFixed(2));
-				row.find(".subTotal").val(subtotal.toFixed(2));
-			}
+function calculateTotal() {
+	var subTotal = 0;
+
+	$("input.price").each(function () {
+		var price = parseFloat($(this).val());
+		if (!isNaN(price)) {
+			subTotal += price;
 		}
-	);
+	});
+
+	var discountPercent = parseFloat($("#DiscountPercent").val());
+	var discountAmount = subTotal * (discountPercent / 100);
+	var netTotal = subTotal - discountAmount;
+
+	$("#grandTotal").val(subTotal.toFixed(2));
+	$("#DiscountAmount").val(discountAmount.toFixed(2));
+	$("#netTotal").val(netTotal.toFixed(2));
+}
+
+function toggleRemoveButton() {
+	var rowCount = $("table tbody tr").length;
+	if (rowCount === 1) {
+		$(".removeRowBtn").prop("disabled", true);
+	} else {
+		$(".removeRowBtn").prop("disabled", false);
+	}
+}
+
+// add the billing information and test items
+$(document).on("click", "#saveTestItems", function (e) {
+	e.preventDefault();
+	// alert();
+
+	var formData = $(this).serialize();
+	alert(formData);
+	// var testItems = $("#testItems").val();
+	// var quantity = $("#quantity").val();
+	// var unitPrice = $("#unitPrice").val();
+	// var discountPercentage = $("#discountPercentage").val();
+	// var discountAmount = $("#discountAmount").val();
+	// var subTotal = $("#subTotal").val();
+	// var totalDiscountPercent = $("#totalDiscountPercent").val();
+	// var totalDiscountAmount = $("#totalDiscountAmount").val();
+	// var grandTotal = $("#grandTotal").val();
+
+	// alert(testItems);
+	// alert(quantity);
+	// alert(unitPrice);
+	// alert(discountPercentage);
+	// alert(discountAmount);
+	// alert(subTotal);
+	// alert(totalDiscountPercent);
+	// alert(totalDiscountAmount);
+	// alert(grandTotal);
+	$.ajax({
+		url: "test/storeAll",
+		dataType: "json",
+		type: "POST",
+		data: formData,
+		success: function (response) {
+			console.log(response);
+		},
+	});
 });

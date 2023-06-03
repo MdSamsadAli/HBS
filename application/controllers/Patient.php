@@ -79,6 +79,14 @@ class Patient extends CI_Controller
         $id = $this->input->post('id');
         // var_dump($id);
         $data = $this->patient->singleData($id);
+        // var_dump($data);
+        echo json_encode($data);
+    }
+
+    public function getPatientId()
+    {
+        $id = $this->input->post('id');
+        $data = $this->patient->getId($id);
         echo json_encode($data);
     }
 }
