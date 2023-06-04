@@ -61,7 +61,7 @@ $(document).on("click", "#storerecord", function (e) {
 	// alert(languages);
 
 	// Validate name field
-	var name = $("#name").val();
+	// var name = $("#name").val();
 	if (name.trim() === "") {
 		toastr.error("Please enter a name");
 		return;
@@ -73,7 +73,7 @@ $(document).on("click", "#storerecord", function (e) {
 		return;
 	}
 
-	var phonenumber = $("#phonenumber").val();
+	// var phonenumber = $("#phonenumber").val();
 	if (phonenumber.trim() === "") {
 		toastr.error("Please enter a phonenumber");
 		return;
@@ -84,7 +84,7 @@ $(document).on("click", "#storerecord", function (e) {
 	// 	return;
 	// }
 
-	var age = $("#age").val();
+	// var age = $("#age").val();
 	if (age.trim() === "") {
 		toastr.error("Please enter a age");
 		return;
@@ -96,48 +96,48 @@ $(document).on("click", "#storerecord", function (e) {
 		return;
 	}
 
-	var country = $("#country").val();
+	// var country = $("#country").val();
 	if (country === "") {
 		toastr.error("Please Select a country");
 		return;
 	}
 
-	var province = $("#province").val();
+	// var province = $("#province").val();
 	if (province === "") {
 		toastr.error("Please Select a province");
 		return;
 	}
 
-	var district = $("#district").val();
+	// var district = $("#district").val();
 	if (district === "") {
 		toastr.error("Please Select a district");
 		return;
 	}
 
-	var municipality = $("#municipality").val();
+	// var municipality = $("#municipality").val();
 	if (municipality === "") {
 		toastr.error("Please Select a municipality");
 		return;
 	}
 
-	var address = $("#address").val();
+	// var address = $("#address").val();
 	if (address.trim() === "") {
 		toastr.error("Please enter a address");
 		return;
 	}
 
 	// Validate gender field
-	var gender = $("input[name='gender']:checked").val();
+	// var gender = $("input[name='gender']:checked").val();
 	if (!gender) {
 		toastr.error("Please select a gender");
 		return;
 	}
 
 	// Validate language field
-	var languages = [];
-	$("input[name='language']:checked").each(function () {
-		languages.push($(this).val());
-	});
+	// var languages = [];
+	// $("input[name='language']:checked").each(function () {
+	// 	languages.push($(this).val());
+	// });
 	if (languages.length === 0) {
 		toastr.error("Please select at least one language");
 		return;
@@ -348,7 +348,7 @@ $("#district").change(function () {
 $(document).on("click", "#billing", function (e) {
 	e.preventDefault();
 	var id = $(this).attr("value");
-	alert(id);
+	// alert(id);
 
 	$.ajax({
 		url: "patient/getPatientId",
@@ -367,7 +367,6 @@ $(document).on("click", "#billing", function (e) {
 
 // add button clone and remove button and all the mathematical calculation
 $(document).ready(function () {
-	$("#DiscountPercent").val(0);
 	var rowCounter = 1; // Counter variable for generating unique IDs
 	toggleRemoveButton();
 
@@ -431,7 +430,7 @@ function calculateTotal() {
 	var discountAmount = subTotal * (discountPercent / 100);
 	var netTotal = subTotal - discountAmount;
 
-	$("#grandTotal").val(subTotal.toFixed(2));
+	$("#subTotal").val(subTotal.toFixed(2));
 	$("#DiscountAmount").val(discountAmount.toFixed(2));
 	$("#netTotal").val(netTotal.toFixed(2));
 }
@@ -450,34 +449,105 @@ $(document).on("click", "#saveTestItems", function (e) {
 	e.preventDefault();
 	// alert();
 
-	var formData = $(this).serialize();
-	alert(formData);
-	// var testItems = $("#testItems").val();
-	// var quantity = $("#quantity").val();
-	// var unitPrice = $("#unitPrice").val();
-	// var discountPercentage = $("#discountPercentage").val();
-	// var discountAmount = $("#discountAmount").val();
-	// var subTotal = $("#subTotal").val();
-	// var totalDiscountPercent = $("#totalDiscountPercent").val();
-	// var totalDiscountAmount = $("#totalDiscountAmount").val();
-	// var grandTotal = $("#grandTotal").val();
+	// var testItems = [];
+	// var quantity = [];
+	// var unitPrice = [];
+	// var price = [];
 
+	var id = $("#patientId").val();
+	var billing_date = $("#datetime").val();
+	var testItems = $("input[name='testItems[]']")
+		.map(function () {
+			return $(this).val();
+		})
+		.get();
+	// .join("");
+	if (
+		testItems.length === 0 ||
+		testItems.filter((item) => item.trim() !== "").length === 0
+	) {
+		toastr.error("Please enter a Test Items");
+		return;
+	}
+
+	var quantity = $("input[name='quantity[]']")
+		.map(function () {
+			return $(this).val();
+		})
+		.get()
+		.join("");
+
+	if (quantity.trim() == "") {
+		toastr.error("Please enter a Quantity");
+		return;
+	}
+	var unitPrice = $("input[name='unitPrice[]']")
+		.map(function () {
+			return $(this).val();
+		})
+		.get()
+		.join("");
+	if (unitPrice.trim() === "") {
+		toastr.error("Please enter a Unit price");
+		return;
+	}
+	var price = $("input[name='price[]']")
+		.map(function () {
+			return $(this).val();
+		})
+		.get()
+		.join("");
+	if (price.trim() === "") {
+		toastr.error("Please enter a price");
+		return;
+	}
+	var discountPercentage = $("#DiscountPercent").val();
+	if (!discountPercentage) {
+		discountPercentage = 0;
+	}
+	var discountAmount = $("#DiscountAmount").val();
+	var subTotal = $("#subTotal").val();
+	var netTotal = $("#netTotal").val();
+
+	// alert(id);
+	// alert(billing_date);
 	// alert(testItems);
 	// alert(quantity);
 	// alert(unitPrice);
+	// alert(price);
 	// alert(discountPercentage);
 	// alert(discountAmount);
 	// alert(subTotal);
-	// alert(totalDiscountPercent);
-	// alert(totalDiscountAmount);
-	// alert(grandTotal);
+	// alert(netTotal);
+
 	$.ajax({
 		url: "test/storeAll",
 		dataType: "json",
 		type: "POST",
-		data: formData,
+		data: {
+			patient_id: id,
+			billingDate: billing_date,
+			testItems: testItems,
+			quantity: quantity,
+			unitPrice: unitPrice,
+			price: price,
+			discountPercentage: discountPercentage,
+			discountAmount: discountAmount,
+			subTotal: subTotal,
+			netTotal: netTotal,
+		},
 		success: function (response) {
 			console.log(response);
+			$("#billModal").modal("hide");
 		},
 	});
+});
+
+// Reset the form when the modal is hidden
+$("#billModal").on("hidden.bs.modal", function () {
+	$("#testItems").val(""); // Clear the test items field
+	$("#quantity").val(""); // Clear the quantity field
+	$("#unitPrice").val(""); // Clear the unit price field
+	$("#price").val(""); // Clear the price field
+	$("#DiscountPercent").val(""); // Clear the price field
 });
