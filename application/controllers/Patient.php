@@ -3,7 +3,10 @@ class Patient extends CI_Controller
 {
     public function index()
     {
+        $this->load->view('layout/header');
+        $this->load->view('layout/nav');
         $this->load->view('patient/index');
+        $this->load->view('layout/footer');
     }
     public function storePatients()
     {
@@ -50,18 +53,14 @@ class Patient extends CI_Controller
                 'label' => 'Gender',
                 'rules' => 'required'
             ),
-            // array(
-            //     'field' => 'language',
-            //     'label' => 'Language',
-            //     'rules' => 'required|in_list[english,nepali,hindi]'
-            // ),
         );
         
         $this->form_validation->set_rules($config);
 
         if($this->form_validation->run() == FALSE){
             // Form validation failed
-            echo "something not working";
+            $response = $this->session->set_flashdata('error','please enter a required field');
+            echo json_encode($response);
         }else{
             $response = $this->patient->storeAllPatients();
             echo json_encode($response);
@@ -85,9 +84,12 @@ class Patient extends CI_Controller
 
     public function getPatientId()
     {
-        $id = $this->input->post('id');
-        $data = $this->patient->getId($id);
-        echo json_encode($data);
+            date_default_timezone_set('Asia/Kathmandu'); // Set the timezone to Nepal
+            $id = $this->input->post('id');
+            $datetime = date("Y-m-d H:i:s");
+            $response['date'] = $datetime;
+            $response['id'] = $id;
+            echo json_encode($response);
     }
 }
 

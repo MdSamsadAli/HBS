@@ -1,6 +1,6 @@
 // form validation
 $(document).ready(function () {
-	$("#form").validate();
+	// $("#form").validate();
 
 	// Listen to the input event on the phone number field
 	$("#phonenumber").on("input", function () {
@@ -38,6 +38,37 @@ $(document).ready(function () {
 		// Update the value of the name field
 		$(this).val(name);
 	});
+
+	// Listen to the input event on the phone number field
+	$("#quantity").on("input", function () {
+		var quantity = $(this).val();
+
+		// Remove any non-numeric characters
+		quantity = quantity.replace(/\D/g, "");
+
+		// Limit the input to 10 digits
+		// quantity = quantity.slice(0, 10);
+
+		// Update the value of the phone number field
+		$(this).val(quantity);
+	});
+
+	// Listen to the input event on the phone number field
+	$("#unitPrice").on("input", function () {
+		var unitPrice = $(this).val();
+
+		// Remove any non-numeric characters except dot (.)
+		unitPrice = unitPrice.replace(/[^\d.]/g, "");
+
+		// Remove extra dots
+		unitPrice = unitPrice.replace(/\.(?=.*\.)/g, "");
+
+		// Limit the input to 10 digits
+		// quantity = quantity.slice(0, 10);
+
+		// Update the value of the phone number field
+		$(this).val(unitPrice);
+	});
 });
 
 // store all patients into database
@@ -61,7 +92,6 @@ $(document).on("click", "#storerecord", function (e) {
 	// alert(languages);
 
 	// Validate name field
-	// var name = $("#name").val();
 	if (name.trim() === "") {
 		toastr.error("Please enter a name");
 		return;
@@ -73,7 +103,6 @@ $(document).on("click", "#storerecord", function (e) {
 		return;
 	}
 
-	// var phonenumber = $("#phonenumber").val();
 	if (phonenumber.trim() === "") {
 		toastr.error("Please enter a phonenumber");
 		return;
@@ -84,7 +113,6 @@ $(document).on("click", "#storerecord", function (e) {
 	// 	return;
 	// }
 
-	// var age = $("#age").val();
 	if (age.trim() === "") {
 		toastr.error("Please enter a age");
 		return;
@@ -96,48 +124,38 @@ $(document).on("click", "#storerecord", function (e) {
 		return;
 	}
 
-	// var country = $("#country").val();
 	if (country === "") {
 		toastr.error("Please Select a country");
 		return;
 	}
 
-	// var province = $("#province").val();
 	if (province === "") {
 		toastr.error("Please Select a province");
 		return;
 	}
 
-	// var district = $("#district").val();
 	if (district === "") {
 		toastr.error("Please Select a district");
 		return;
 	}
 
-	// var municipality = $("#municipality").val();
 	if (municipality === "") {
 		toastr.error("Please Select a municipality");
 		return;
 	}
 
-	// var address = $("#address").val();
 	if (address.trim() === "") {
 		toastr.error("Please enter a address");
 		return;
 	}
 
 	// Validate gender field
-	// var gender = $("input[name='gender']:checked").val();
 	if (!gender) {
 		toastr.error("Please select a gender");
 		return;
 	}
 
 	// Validate language field
-	// var languages = [];
-	// $("input[name='language']:checked").each(function () {
-	// 	languages.push($(this).val());
-	// });
 	if (languages.length === 0) {
 		toastr.error("Please select at least one language");
 		return;
@@ -163,25 +181,21 @@ $(document).on("click", "#storerecord", function (e) {
 			console.log(response);
 			getPatients();
 			$("#myModal").modal("hide");
-
-			// if (response.error) {
-			// 	if (response.name_error != "") {
-			// 		$("#name_error").html(response.name_error);
-			// 	}
-			// 	if (response.number_error != "") {
-			// 		$("#number_error").html(response.number_error);
-			// 	}
-			// }
 		},
 	});
 });
-
+// Reset the form when the modal is hidden
+$("#myModal").on("hidden.bs.modal", function () {
+	$("#edit_id").val("");
+	$("#form")[0].reset();
+});
 // Reset the form when the modal is hidden
 $("#editModal").on("hidden.bs.modal", function () {
 	$("#edit_id").val("");
 	$("#form")[0].reset();
 });
-
+// Initialize DataTable
+var dataTable;
 // get all patients from the database
 function getPatients() {
 	$.ajax({
@@ -192,8 +206,11 @@ function getPatients() {
 			console.log(response);
 
 			var tbody;
+			var Sno = 1;
 			for (key in response) {
 				tbody += "<tr>";
+				tbody += "<td>" + Sno++;
+				+"</td>";
 				tbody += "<td>" + response[key]["patientid"] + "</td>";
 				tbody += "<td>" + response[key]["name"] + "</td>";
 				tbody += "<td>" + response[key]["age"] + "</td>";
@@ -209,7 +226,18 @@ function getPatients() {
 						</td>`;
 				tbody += "</tr>";
 			}
+
+			// Destroy the existing DataTable instance
+			if (dataTable) {
+				dataTable.destroy();
+			}
+
+			// // Update the table body and reinitialize DataTable
 			$("#patientinfo").html(tbody);
+			dataTable = $("#user_data").DataTable({
+				paging: true,
+				pageLength: 10,
+			});
 		},
 	});
 }
@@ -277,17 +305,36 @@ $(document).on("click", "#edit", function (e) {
 });
 
 $.getJSON("assets/json/country.json", function (response) {
-	response.forEach(function (elem) {
-		$("#country").append(`<option value="${elem.name}">${elem.name}</option>`);
+	response.forEach(function (element) {
+		$("#country").append(
+			`<option value="${element.name}">${element.name}</option>`
+		);
 	});
 });
 
-$.getJSON("assets/json/provincedistrict.json", function (response) {
-	response.forEach(function (elem) {
-		$("#province").append(
-			`<option value="${elem.province}">${elem.province}</option>`
-		);
-	});
+$("#country").change(function () {
+	var selectedCountry = $(this).val();
+
+	// Clear previous options
+	$("#province")
+		.empty()
+		.append('<option value="">---Select Province---</option>');
+
+	// If selected country is Nepal, fetch province data
+	if (selectedCountry === "Nepal") {
+		// Fetch province data
+		$.getJSON("assets/json/provincedistrict.json", function (response) {
+			console.log("province" + response);
+			response.forEach(function (elem) {
+				$("#province").append(
+					`<option value="${elem.province}">${elem.province}</option>`
+				);
+			});
+		});
+	} else {
+		// If selected country is not Nepal, display "Others" option for province
+		$("#province").append('<option value="others">Others</option>');
+	}
 });
 
 $("#province").change(function () {
@@ -296,11 +343,14 @@ $("#province").change(function () {
 	// Clear previous options
 	$("#district")
 		.empty()
-		.append('<option value="">---Select District---</option>');
+		.append(
+			'<option value="">---Select District---</option>',
+			'<option value="others">Others</option>'
+		);
 
 	// Fetch district data based on the selected province
 	$.getJSON("assets/json/provincedistrict.json", function (response) {
-		console.log("province" + response);
+		// console.log("province" + response);
 		var district = response.find(function (elem) {
 			return elem.province === selectedProvince;
 		});
@@ -320,7 +370,10 @@ $("#district").change(function () {
 	// Clear previous options
 	$("#municipality")
 		.empty()
-		.append('<option value="">---Select Municipality---</option>');
+		.append(
+			'<option value="">---Select Municipality---</option>',
+			'<option value="others">Others</option>'
+		);
 
 	// Fetch municipality data based on the selected district
 	$.getJSON("assets/json/municipality.json", function (response) {
@@ -356,9 +409,9 @@ $(document).on("click", "#billing", function (e) {
 		dataType: "json",
 		type: "POST",
 		success: function (data) {
-			console.log(data);
-			$("#patientId").val(data.patientid).prop("readonly", true);
-			$("#datetime").val(data.datetime).prop("readonly", true);
+			// console.log(data);
+			$("#patientId").val(data.id).prop("readonly", true);
+			$("#datetime").val(data.date).prop("readonly", true);
 		},
 	});
 
@@ -368,9 +421,8 @@ $(document).on("click", "#billing", function (e) {
 // add button clone and remove button and all the mathematical calculation
 $(document).ready(function () {
 	var rowCounter = 1; // Counter variable for generating unique IDs
-	toggleRemoveButton();
+	// toggleRemoveButton();
 
-	// Add button click event
 	$(document).on("click", ".addRowBtn", function () {
 		var lastRow = $("table tbody tr:last");
 		var newRow = lastRow.clone();
@@ -384,18 +436,28 @@ $(document).ready(function () {
 
 		newRow.find("input").val(""); // Clear input values in the new row
 		lastRow.after(newRow); // Append the new row after the last row
-		toggleRemoveButton();
+		// toggleRemoveButton();
+
+		// Hide the "Add" button in the previous row
+		lastRow.find(".addRowBtn").hide();
+
+		// Show the "Remove" button in the previous row
+		lastRow.find(".removeRowBtn").show();
 	});
 
 	// Remove button click event
 	$(document).on("click", ".removeRowBtn", function () {
 		var rowCount = $("table tbody tr").length;
-		// console.log(rowCount);
-		if (rowCount > 1) {
-			$(this).closest("tr").remove(); // Remove the current row
-			toggleRemoveButton();
+		var removeButtonRow = $(this).closest("tr");
+
+		if (rowCount > 1 && !removeButtonRow.hasClass("add-row")) {
+			removeButtonRow.remove(); // Remove the current row
+			// toggleRemoveButton();
 			calculateTotal();
 		}
+
+		// Show the "Add" button in the last remaining row
+		$("table tbody tr:last .addRowBtn").show();
 	});
 
 	// Keyup event for calculating price
@@ -435,14 +497,14 @@ function calculateTotal() {
 	$("#netTotal").val(netTotal.toFixed(2));
 }
 
-function toggleRemoveButton() {
-	var rowCount = $("table tbody tr").length;
-	if (rowCount === 1) {
-		$(".removeRowBtn").prop("disabled", true);
-	} else {
-		$(".removeRowBtn").prop("disabled", false);
-	}
-}
+// function toggleRemoveButton() {
+// 	var rowCount = $("table tbody tr").length;
+// 	if (rowCount === 1) {
+// 		$(".removeRowBtn").prop("disabled", true);
+// 	} else {
+// 		$(".removeRowBtn").prop("disabled", false);
+// 	}
+// }
 
 // add the billing information and test items
 $(document).on("click", "#saveTestItems", function (e) {
@@ -503,7 +565,8 @@ $(document).on("click", "#saveTestItems", function (e) {
 	}
 	var discountPercentage = $("#DiscountPercent").val();
 	if (!discountPercentage) {
-		discountPercentage = 0;
+		toastr.error("Please enter a Discount percentage between 0 and 100");
+		return;
 	}
 	var discountAmount = $("#DiscountAmount").val();
 	var subTotal = $("#subTotal").val();
@@ -550,4 +613,45 @@ $("#billModal").on("hidden.bs.modal", function () {
 	$("#unitPrice").val(""); // Clear the unit price field
 	$("#price").val(""); // Clear the price field
 	$("#DiscountPercent").val(""); // Clear the price field
+});
+
+// Billing Information
+$(document).on("click", "#editBill", function (e) {
+	e.preventDefault();
+	var id = $(this).attr("value");
+	// alert(id);
+
+	$.ajax({
+		url: "test/editBill",
+		type: "POST",
+		dataType: "json",
+		data: { id: id },
+		success: function (data) {
+			console.log(data);
+			$("#edit_id").val(data.patientid).prop("readonly", true);
+			$("#name").text(data.name);
+			$("#date").text(data.billing_date);
+			$("#billno").text(data.sample_no);
+			$("#test_items").text(data.test_items);
+			$("#discount").text(data.discount_amount);
+			$("#subTotal").text(data.sub_total);
+			$("#netTotal").text(data.net_total);
+		},
+	});
+});
+
+$(document).ready(function () {
+	$(".navbar-brand").on("click", function () {
+		// Remove the "listactive" class from all navigation buttons
+		$(".navbar-brand").removeClass("listactive");
+
+		// Add the "listactive" class to the clicked navigation button
+		$(this).addClass("listactive");
+
+		// Remove the "listactive" class from all parent li elements
+		$("li").removeClass("listactive");
+
+		// Add the "listactive" class to the parent li element of the clicked navigation button
+		$(this).parent().addClass("listactive");
+	});
 });

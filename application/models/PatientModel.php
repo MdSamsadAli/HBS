@@ -35,12 +35,21 @@ class patientModel extends CI_Model {
             'datetime'=> date('Y-m-d H:i:s'),
         );
         $query = $this->db->insert('patients', $data);
-        return $query;
+        if ($query) {
+            // The insert query was successful
+            $this->session->set_flashdata('success', 'Data inserted successfully.');
+            return;
+        } else {
+            // The insert query failed
+            $this->session->set_flashdata('error', 'Failed to insert data.');
+            return;
+        }
+        // return $query;
     }
 
     public function getAllPatients() 
     {
-        $query = $this->db->get('patients');
+        $query = $this->db->order_by('patientid', 'desc')->get('patients');
         // var_dump($query);
         return $query->result_array();
     }
@@ -52,11 +61,18 @@ class patientModel extends CI_Model {
         $query = $this->db->get();
         return $query->row();
     }
-    public function getId($id)
+
+    public function getBillingData()
     {
-        $this->db->select("datetime, patientid");
-        $this->db->from('patients');
-        $this->db->where('patientid', $id);
+        $query = $this->db->order_by('id', 'desc')->get('billing');
+        return $query->result_array();
+    }
+    public function billingData($id){
+        $this->db->select("billing.*, patients.name, tests.test_items, tests.quantity");
+        $this->db->from('billing');
+        $this->db->join('patients', 'billing.patient_id = patients.patientid');
+        $this->db->join('tests', 'billing.sample_no = tests.id');
+        $this->db->where('billing.id', $id);
         $query = $this->db->get();
         return $query->row();
     }

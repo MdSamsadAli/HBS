@@ -1,34 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Billing System</title>
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/jquery-3.7.0.js"></script>
-    <script src="assets/js/jquery.validate.min.js"></script>
-    <style>
-        .error {
-            color: red;
-        }
-    </style>
-    <link rel="stylesheet" href="assets/css/toastr.min.css">
-    <script src="assets/js/toastr.min.js"></script>
-</head>
-<body>
+
     <!-- table form -->
     <div class="m-4">
         <div >
             <button type="button" class="btn btn-sm btn-primary" data-bs-target="#myModal" data-bs-toggle="modal">Register Patient</button>
-        </div>
-        <div class="border" style="border-bottom:none !important;">
+         </div>
+        <div class="border">
             <div class="border-bottom text-center">
                 <h2>Patient Information</h2>
             </div>
-            <table class="table">
+            <?php if ($this->session->flashdata('success')): ?>
+                <div class="alert alert-success">
+                    <?php echo $this->session->flashdata('success'); ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($this->session->flashdata('error')): ?>
+                <div class="alert alert-danger">
+                    <?php echo $this->session->flashdata('error'); ?>
+                </div>
+            <?php endif; ?>
+            <table class="border border-bottom table table-bordered table-striped" id="user_data">
                 <thead>
                     <tr>
+                        <th>Sno.</th>
                         <th>Patient ID</th>
                         <th>Patient Name</th>
                         <th>Age</th>
@@ -115,7 +109,7 @@
                                         <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
                                         <div class="col-sm-12">
                                             <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="gender" id="male" value="Male">
+                                            <input class="form-check-input" type="radio" name="gender" id="male" value="Male" checked>
                                             <label class="form-check-label" for="gridRadios1">
                                                 Male
                                             </label>
@@ -167,7 +161,7 @@
         </div>
     </div>
 
-    <!-- EDIT Modal HTML -->
+    <!-- Preview Modal HTML -->
     <div class="m-4">
         <div id="editModal" class="modal fade" data-bs-backdrop="static" tabindex="-1">
             <div class="modal-dialog modal-lg">
@@ -308,7 +302,7 @@
                                     <input type="text" class="form-control unitPrice" name="unitPrice[]" id="unitPrice" placeholder="Unit Price" required>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control price" name="price[]" id="price" placeholder="Price" required>
+                                    <input type="text" class="form-control price" name="price[]" id="price" placeholder="Price" required readonly>
                                 </td>
                                 <td>
                                     <div class="d-flex">
@@ -372,8 +366,3 @@
             </div>
         </div>
     </div>
-
-    <!-- all assets and funcions  -->
-    <script src="assets/js/jquery.js"></script>
-</body>
-</html>
