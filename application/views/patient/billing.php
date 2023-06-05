@@ -23,12 +23,12 @@
                 <tr>
                     <td><?php echo $id ?></td>
                     <td><?php echo $row['billing_date']; ?></td>
-                    <td><?php echo $row['sample_no']; ?></td>
+                    <td><?php echo $row['id']; ?></td>
                     <td><?php echo $row['discount_amount']; ?></td>
                     <td><?php echo $row['sub_total']; ?></td>
                     <td><?php echo $row['net_total']; ?></td>
                     <td>
-                        <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" value="<?php echo $row['id'];?>" id="editBill">Edit</a>
+                        <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" value="<?php echo $row['id'];?>" id="editBill">View</a>
                         <a href="#" class="btn btn-secondary btn-sm">Print</a>
                     </td>
                 </tr>
@@ -69,13 +69,26 @@
                     Bill No : <span class="col-sm-8" id="billno"></span>
                 </h6>
             </div>
-            <hr>
 
             <div class="mb-3">
                 <h6>
-                    Test Items : <span class="col-sm-8" id="test_items"></span>
+                    Patient Id : <span class="col-sm-8" id="patient_id"></span>
                 </h6>
             </div>
+            <hr>
+            <table class="border border-bottom table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Test Items</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody id="invoice_data">
+                   
+                </tbody>
+            </table>
 
             <div class="mb-3">
                 <h6>

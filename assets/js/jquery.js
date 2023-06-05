@@ -619,7 +619,7 @@ $("#billModal").on("hidden.bs.modal", function () {
 $(document).on("click", "#editBill", function (e) {
 	e.preventDefault();
 	var id = $(this).attr("value");
-	// alert(id);
+	alert(id);
 
 	$.ajax({
 		url: "test/editBill",
@@ -628,30 +628,39 @@ $(document).on("click", "#editBill", function (e) {
 		data: { id: id },
 		success: function (data) {
 			console.log(data);
-			$("#edit_id").val(data.patientid).prop("readonly", true);
-			$("#name").text(data.name);
-			$("#date").text(data.billing_date);
-			$("#billno").text(data.sample_no);
-			$("#test_items").text(data.test_items);
-			$("#discount").text(data.discount_amount);
-			$("#subTotal").text(data.sub_total);
-			$("#netTotal").text(data.net_total);
+			// $("#patient_id").text(data[0].patient_id);
+			// $("#name").text(data[0].name);
+			// $("#date").text(data[0].billing_date);
+			// $("#billno").text(data[0].sample_no);
+
+			// var tableBody = $("#invoice_data");
+			// tableBody.empty();
+			// $.each(data, function (index, item) {
+			// 	var row = $("<tr>");
+			// 	row.append($("<td>").text(item.test_items));
+			// 	row.append($("<td>").text(item.quantity));
+			// 	row.append($("<td>").text(item.unit_price));
+			// 	row.append($("<td>").text(item.price));
+			// 	tableBody.append(row);
+			// });
+
+			// // Update other HTML elements with relevant data
+			// $("#subTotal").text(data[0].sub_total);
+			// $("#discount").text(data[0].discount_amount);
+			// $("#netTotal").text(data[0].net_total);
+			// $("#name").text(data.name);
+			// $("#date").text(data.billing_date);
+			// $("#billno").text(data.sample_no);
+			// $("#test_items").text(data.test_items);
+			// $("#quantity").text(data.quantity);
+			// $("#unitPrice").text(data.unit_price);
+			// $("#price").text(data.price);
+			// $("#discount").text(data.discount_amount);
+			// $("#subTotal").text(data.sub_total);
+			// $("#netTotal").text(data.net_total);
+			$(document).off("click", "#editBill");
 		},
 	});
 });
 
-$(document).ready(function () {
-	$(".navbar-brand").on("click", function () {
-		// Remove the "listactive" class from all navigation buttons
-		$(".navbar-brand").removeClass("listactive");
-
-		// Add the "listactive" class to the clicked navigation button
-		$(this).addClass("listactive");
-
-		// Remove the "listactive" class from all parent li elements
-		$("li").removeClass("listactive");
-
-		// Add the "listactive" class to the parent li element of the clicked navigation button
-		$(this).parent().addClass("listactive");
-	});
-});
+$(document).ready(function () {});
