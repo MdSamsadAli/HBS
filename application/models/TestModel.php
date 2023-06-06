@@ -13,6 +13,8 @@ class TestModel extends CI_Model
         $discountAmount = $this->input->post('discountAmount');
         $subTotal = $this->input->post('subTotal');
         $netTotal = $this->input->post('netTotal');
+        // var_dump($unitPrices);
+        // print_r($unitPrices);
        
         // Insert data into the "billing" table
         $this->db->insert('billing', [
@@ -37,6 +39,8 @@ class TestModel extends CI_Model
                 'price' => $prices[$i]
             ]);
         }
+        
+        // echo $this->db->last_query(); 
 
     }
 }

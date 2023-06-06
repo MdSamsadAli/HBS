@@ -29,7 +29,7 @@
                     <td><?php echo $row['net_total']; ?></td>
                     <td>
                         <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" value="<?php echo $row['id'];?>" id="editBill">View</a>
-                        <a href="#" class="btn btn-secondary btn-sm">Print</a>
+                        <!-- <a href="#" class="btn btn-secondary btn-sm">Print</a> -->
                     </td>
                 </tr>
                 <?php
@@ -42,115 +42,83 @@
     </div>
 </div>
 
-<!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content ">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">
-            Invoice List
-        </h5>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #f8f9fa;">
+        <h5 class="modal-title text-uppercase" id="staticBackdropLabel">Invoice</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      
+
       <div class="modal-body">
-         <!-- Preview Modal HTML -->
-        <form class="row mb-4">
-            <div class="d-flex justify-content-between mb-3">
-                <div>
-                    <h5>Patient Name : <span id="name"></span></h5>
-                </div>
-                <div>
-                    <h6>Billing Date : <span id="date"></span></h6>
-                </div>
-            </div>
-            <div class="mb-3">
-                <h6>
-                    Bill No : <span class="col-sm-8" id="billno"></span>
-                </h6>
-            </div>
-
-            <div class="mb-3">
-                <h6>
-                    Patient Id : <span class="col-sm-8" id="patient_id"></span>
-                </h6>
-            </div>
-            <hr>
-            <table class="border border-bottom table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Test Items</th>
-                        <th>Quantity</th>
-                        <th>Unit Price</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody id="invoice_data">
-                   
-                </tbody>
-            </table>
-
-            <div class="mb-3">
-                <h6>
-                    Sub Total : <span class="col-sm-8" id="subTotal"></span>
-                </h6>
+        <!-- Preview Modal HTML -->
+        <form class="mb-4" id="form">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h4>Patient Name: <span id="name"></span></h4>
             </div>
             <div>
-
-            <div class="mb-3">
-                <h6>
-                    Discount : <span class="col-sm-8" id="discount"></span>
-                </h6>
+              <h5>Billing Date: <span id="date"></span></h5>
             </div>
+          </div>
 
-            <div class="mb-3">
-                <h6>
-                    Net Total : <span class="col-sm-8" id="netTotal"></span>
-                </h6>
-            </div>
+          <div class="mb-3">
+            <h6 class="fw-bold">Bill No: <span id="billno"></span></h6>
+          </div>
 
-            <!-- <table class="border border-bottom table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Test Items</th>
-                        <th>Quantity</th>
-                        <th>Unit Price</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody id="invoice_data">
-                    <tr>
-                        <td><input type="text" id="test_items"></td>
-                    </tr>
-                </tbody>
-            </table> -->
+          <div class="mb-3">
+            <h6 class="fw-bold">Patient Id: <span class="col-sm-8" id="patient_id"></span></h6>
+          </div>
 
-            
+          <hr>
 
-            <!-- <div class="form-group row mb-3">
-                <label for="inputEmail3" class="col-sm-4 col-form-label">Sub Total</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" id="subTotal" name="subTotal" placeholder="Sub Total" readonly>
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead style="background-color: #f8f9fa;">
+                <tr>
+                  <th>Test Items</th>
+                  <th>Quantity</th>
+                  <th>Unit Price</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody id="invoice_data">
+                <!-- Invoice data rows will be dynamically added here -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mt-4">
+            <div class="d-flex justify-content-end">
+              <div class="col-sm-6 p-3 border">
+                <div class="mb-3">
+                  <h6 class="fw-bold">Sub Total:</h6>
+                  <h6 class="text-end" id="subTotal"></h6>
                 </div>
-            </div>
 
-            <div class="form-group row mb-3">
-                <label for="inputEmail3" class="col-sm-4 col-form-label">Discount</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" id="discount" >
+                <div class="mb-3">
+                  <h6 class="fw-bold">Discount:</h6>
+                  <h6 class="text-end" id="discount"></h6>
                 </div>
+
+                <div class="mb-3">
+                  <h6 class="fw-bold">Net Total:</h6>
+                  <h6 class="text-end" id="netTotal"></h6>
+                </div>
+              </div>
             </div>
-            
-            <div class="form-group row mb-3">
-                <label for="inputEmail3" class="col-sm-4 col-form-label">Net Total</label>
-                <div class="col-sm-8">
-                    <input type="text" class="form-control" id="netTotal" required>
-                </div>
-            </div> -->
-            
+            <div class="d-flex justify-content-end mt-4">
+              <a href="#" class="btn btn-primary btn-sm">Print</a>
+            </div>
+          </div>
         </form>
-
       </div>
     </div>
   </div>
 </div>
+
+
+
+
+
+

@@ -33,7 +33,7 @@ $(document).ready(function () {
 		var name = $(this).val();
 
 		// Remove any numeric characters
-		name = name.replace(/[^A-Za-z]/g, "");
+		name = name.replace(/[^A-Za-z]/g, " ");
 
 		// Update the value of the name field
 		$(this).val(name);
@@ -58,10 +58,10 @@ $(document).ready(function () {
 		var unitPrice = $(this).val();
 
 		// Remove any non-numeric characters except dot (.)
-		unitPrice = unitPrice.replace(/[^\d.]/g, "");
+		// unitPrice = unitPrice.replace(/[^\d.]/g, "");
 
-		// Remove extra dots
-		unitPrice = unitPrice.replace(/\.(?=.*\.)/g, "");
+		// // Remove extra dots
+		// unitPrice = unitPrice.replace(/\.(?=.*\.)/g, "");
 
 		// Limit the input to 10 digits
 		// quantity = quantity.slice(0, 10);
@@ -119,7 +119,7 @@ $(document).on("click", "#storerecord", function (e) {
 	}
 	// Validate age field
 	var age = parseInt($("#age").val(), 10);
-	if (isNaN(age) || age < 0 || age > 90) {
+	if (isNaN(age) || age < 0 || age > 100) {
 		toastr.error("Please enter a valid age (up to 90 years)");
 		return;
 	}
@@ -289,17 +289,7 @@ $(document).on("click", "#edit", function (e) {
 			$("#myModal").modal("hide");
 			$("#editModal").modal("show");
 
-			// Add off-click event
-			// $(document).on("click", function (e) {
-			// 	if (
-			// 		!$(e.target).closest("#editModal").length &&
-			// 		!$(e.target).is("#editModal")
-			// 	) {
-			// 		// Clicked outside the modal form
-			// 		// Perform any desired action here
-			// 		console.log("Clicked outside the modal form");
-			// 	}
-			// });
+			$(document).off("click", "#edit");
 		},
 	});
 });
@@ -436,7 +426,6 @@ $(document).ready(function () {
 
 		newRow.find("input").val(""); // Clear input values in the new row
 		lastRow.after(newRow); // Append the new row after the last row
-		// toggleRemoveButton();
 
 		// Hide the "Add" button in the previous row
 		lastRow.find(".addRowBtn").hide();
@@ -452,7 +441,6 @@ $(document).ready(function () {
 
 		if (rowCount > 1 && !removeButtonRow.hasClass("add-row")) {
 			removeButtonRow.remove(); // Remove the current row
-			// toggleRemoveButton();
 			calculateTotal();
 		}
 
@@ -497,24 +485,10 @@ function calculateTotal() {
 	$("#netTotal").val(netTotal.toFixed(2));
 }
 
-// function toggleRemoveButton() {
-// 	var rowCount = $("table tbody tr").length;
-// 	if (rowCount === 1) {
-// 		$(".removeRowBtn").prop("disabled", true);
-// 	} else {
-// 		$(".removeRowBtn").prop("disabled", false);
-// 	}
-// }
-
 // add the billing information and test items
 $(document).on("click", "#saveTestItems", function (e) {
 	e.preventDefault();
 	// alert();
-
-	// var testItems = [];
-	// var quantity = [];
-	// var unitPrice = [];
-	// var price = [];
 
 	var id = $("#patientId").val();
 	var billing_date = $("#datetime").val();
@@ -536,10 +510,10 @@ $(document).on("click", "#saveTestItems", function (e) {
 		.map(function () {
 			return $(this).val();
 		})
-		.get()
-		.join("");
+		.get();
+	// .join("");
 
-	if (quantity.trim() == "") {
+	if (quantity == "") {
 		toastr.error("Please enter a Quantity");
 		return;
 	}
@@ -547,9 +521,9 @@ $(document).on("click", "#saveTestItems", function (e) {
 		.map(function () {
 			return $(this).val();
 		})
-		.get()
-		.join("");
-	if (unitPrice.trim() === "") {
+		.get();
+	// .join("");
+	if (unitPrice === "") {
 		toastr.error("Please enter a Unit price");
 		return;
 	}
@@ -557,9 +531,9 @@ $(document).on("click", "#saveTestItems", function (e) {
 		.map(function () {
 			return $(this).val();
 		})
-		.get()
-		.join("");
-	if (price.trim() === "") {
+		.get();
+	// .join("");
+	if (price === "") {
 		toastr.error("Please enter a price");
 		return;
 	}
@@ -572,16 +546,17 @@ $(document).on("click", "#saveTestItems", function (e) {
 	var subTotal = $("#subTotal").val();
 	var netTotal = $("#netTotal").val();
 
-	// alert(id);
-	// alert(billing_date);
-	// alert(testItems);
-	// alert(quantity);
-	// alert(unitPrice);
-	// alert(price);
-	// alert(discountPercentage);
-	// alert(discountAmount);
-	// alert(subTotal);
-	// alert(netTotal);
+	alert(id);
+	alert(billing_date);
+	alert(testItems);
+	alert(quantity);
+	alert(unitPrice);
+	alert(price);
+	alert(discountPercentage);
+	alert(discountAmount);
+	alert(subTotal);
+	alert(netTotal);
+	// console.log(quantity);
 
 	$.ajax({
 		url: "test/storeAll",
@@ -619,7 +594,7 @@ $("#billModal").on("hidden.bs.modal", function () {
 $(document).on("click", "#editBill", function (e) {
 	e.preventDefault();
 	var id = $(this).attr("value");
-	alert(id);
+	// alert(id);
 
 	$.ajax({
 		url: "test/editBill",
@@ -628,39 +603,34 @@ $(document).on("click", "#editBill", function (e) {
 		data: { id: id },
 		success: function (data) {
 			console.log(data);
-			// $("#patient_id").text(data[0].patient_id);
-			// $("#name").text(data[0].name);
-			// $("#date").text(data[0].billing_date);
-			// $("#billno").text(data[0].sample_no);
+			$("#patient_id").text(data[0].patient_id);
+			$("#name").text(data[0].name);
+			$("#date").text(data[0].billing_date);
+			$("#billno").text(data[0].id);
 
-			// var tableBody = $("#invoice_data");
-			// tableBody.empty();
-			// $.each(data, function (index, item) {
-			// 	var row = $("<tr>");
-			// 	row.append($("<td>").text(item.test_items));
-			// 	row.append($("<td>").text(item.quantity));
-			// 	row.append($("<td>").text(item.unit_price));
-			// 	row.append($("<td>").text(item.price));
-			// 	tableBody.append(row);
-			// });
+			var tableBody = $("#invoice_data");
+			tableBody.empty();
+			$.each(data, function (index, item) {
+				var row = $("<tr>");
+				row.append($("<td>").text(item.test_items));
+				row.append($("<td>").text(item.quantity));
+				row.append($("<td>").text(item.unit_price));
+				row.append($("<td>").text(item.price));
+				tableBody.append(row);
+			});
 
-			// // Update other HTML elements with relevant data
-			// $("#subTotal").text(data[0].sub_total);
-			// $("#discount").text(data[0].discount_amount);
-			// $("#netTotal").text(data[0].net_total);
-			// $("#name").text(data.name);
-			// $("#date").text(data.billing_date);
-			// $("#billno").text(data.sample_no);
-			// $("#test_items").text(data.test_items);
-			// $("#quantity").text(data.quantity);
-			// $("#unitPrice").text(data.unit_price);
-			// $("#price").text(data.price);
-			// $("#discount").text(data.discount_amount);
-			// $("#subTotal").text(data.sub_total);
-			// $("#netTotal").text(data.net_total);
-			$(document).off("click", "#editBill");
+			// Update other HTML elements with relevant data
+			$("#subTotal").text(data[0].sub_total);
+			$("#discount").text(data[0].discount_amount);
+			$("#netTotal").text(data[0].net_total);
+
+			// $(document).off("click", "#editBill");
 		},
 	});
 });
+$("#staticBackdrop").on("hidden.bs.modal", function () {
+	$("#form")[0].reset();
+});
+// $(document).ready(function () {});
 
-$(document).ready(function () {});
+

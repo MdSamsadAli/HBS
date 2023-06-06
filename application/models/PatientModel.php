@@ -51,7 +51,14 @@ class patientModel extends CI_Model {
     {
         $query = $this->db->order_by('patientid', 'desc')->get('patients');
         // var_dump($query);
-        return $query->result_array();
+        if($query)
+        {
+            return $query->result_array();
+        }
+        else {
+            $this->session->set_flashdata('error', 'Failed to insert data.');
+            return;
+        }
     }
 
     public function singleData($id){
@@ -68,21 +75,13 @@ class patientModel extends CI_Model {
         return $query->result_array();
     }
     public function billingData($id){
-        // $this->db->select("billing.*, patients.name, tests.test_items, tests.quantity, tests.unit_price, tests.quantity");
-        // $this->db->from('billing');
-        // $this->db->join('patients', 'billing.patient_id = patients.patientid');
-        // $this->db->join('tests', 'billing.sample_no = tests.id');
-        // $this->db->where('billing.id', $id);
-        // $query = $this->db->get();
-        // return $query->row();
-
         $this->db->select("billing.*, patients.name, tests.test_items, tests.quantity, tests.unit_price, tests.price");
         $this->db->from('billing');
         $this->db->join('patients', 'billing.patient_id = patients.patientid');
-        $this->db->join('tests', 'billing.id = tests.id');
+        $this->db->join('tests', 'billing.id = tests.sample_id');
         $this->db->where('billing.id', $id);
         $query = $this->db->get();
-        $result = $query->result();
+        $result = $query->result_array();
 
         return $result;
     }
