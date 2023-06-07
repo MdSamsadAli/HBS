@@ -1,6 +1,6 @@
 // form validation
 $(document).ready(function () {
-	// $("#form").validate();
+	$("#form").validate();
 
 	// Listen to the input event on the phone number field
 	$("#phonenumber").on("input", function () {
@@ -38,36 +38,50 @@ $(document).ready(function () {
 		// Update the value of the name field
 		$(this).val(name);
 	});
+	// Listen to the input event on the name field
+	$(document).on("input", "#testItems", function () {
+		var testItems = $(this).val();
+
+		// Remove any numeric characters
+		testItems = testItems.replace(/[^A-Za-z0-9]/g, " ");
+		testItems = testItems.slice(0, 20);
+		testItems = testItems.replace(/\s+/g, " ");
+
+		// Update the value of the testItems field
+		$(this).val(testItems);
+	});
 
 	// Listen to the input event on the phone number field
-	$("#quantity").on("input", function () {
+	$(document).on("input", "#quantity", function () {
 		var quantity = $(this).val();
 
 		// Remove any non-numeric characters
 		quantity = quantity.replace(/\D/g, "");
+		quantity = quantity.slice(0, 5);
 
-		// Limit the input to 10 digits
-		// quantity = quantity.slice(0, 10);
-
-		// Update the value of the phone number field
 		$(this).val(quantity);
 	});
 
 	// Listen to the input event on the phone number field
-	$("#unitPrice").on("input", function () {
+	$(document).on("input", "#unitPrice", function () {
 		var unitPrice = $(this).val();
 
 		// Remove any non-numeric characters except dot (.)
-		// unitPrice = unitPrice.replace(/[^\d.]/g, "");
+		unitPrice = unitPrice.replace(/[^\d.]/g, "");
 
-		// // Remove extra dots
-		// unitPrice = unitPrice.replace(/\.(?=.*\.)/g, "");
+		// Remove extra dots
+		unitPrice = unitPrice.replace(/\.(?=.*\.)/g, "");
+		unitPrice = unitPrice.slice(0, 5);
 
-		// Limit the input to 10 digits
-		// quantity = quantity.slice(0, 10);
-
-		// Update the value of the phone number field
+		// Update the value of the unitPrice field
 		$(this).val(unitPrice);
+	});
+
+	$(document).on("input", "#DiscountPercent", function () {
+		var discount = $(this).val();
+		discount = discount.replace(/\D/g, "");
+		discount = discount.slice(0, 2);
+		$(this).val(discount);
 	});
 });
 
@@ -178,9 +192,14 @@ $(document).on("click", "#storerecord", function (e) {
 			language: languages,
 		},
 		success: function (response) {
-			console.log(response);
-			getPatients();
-			$("#myModal").modal("hide");
+			// console.log(response);
+			if (response.status === "success") {
+				toastr.success(response.message); // Show success message
+				getPatients();
+				$("#myModal").modal("hide");
+			} else {
+				toastr.error(response.message); // Show error message
+			}
 		},
 	});
 });
@@ -203,7 +222,7 @@ function getPatients() {
 		type: "POST",
 		dataType: "json",
 		success: function (response) {
-			console.log(response);
+			// console.log(response);
 
 			var tbody;
 			var Sno = 1;
@@ -255,7 +274,7 @@ $(document).on("click", "#edit", function (e) {
 		type: "POST",
 		data: { id: id },
 		success: function (data) {
-			console.log(data);
+			// console.log(data);
 
 			$("#edit_id").val(data.patientid).prop("readonly", true);
 			$("#editname").val(data.name).prop("readonly", true);
@@ -289,7 +308,7 @@ $(document).on("click", "#edit", function (e) {
 			$("#myModal").modal("hide");
 			$("#editModal").modal("show");
 
-			$(document).off("click", "#edit");
+			// $(document).off("click", "#edit");
 		},
 	});
 });
@@ -314,7 +333,7 @@ $("#country").change(function () {
 	if (selectedCountry === "Nepal") {
 		// Fetch province data
 		$.getJSON("assets/json/provincedistrict.json", function (response) {
-			console.log("province" + response);
+			// console.log("province" + response);
 			response.forEach(function (elem) {
 				$("#province").append(
 					`<option value="${elem.province}">${elem.province}</option>`
@@ -367,7 +386,7 @@ $("#district").change(function () {
 
 	// Fetch municipality data based on the selected district
 	$.getJSON("assets/json/municipality.json", function (response) {
-		console.log(response);
+		// console.log(response);
 		console.log("selectedDistrict::", selectedDistrict);
 
 		var district = response.find(function (elem) {
@@ -391,31 +410,38 @@ $("#district").change(function () {
 $(document).on("click", "#billing", function (e) {
 	e.preventDefault();
 	var id = $(this).attr("value");
-	// alert(id);
-
-	$.ajax({
-		url: "patient/getPatientId",
-		data: { id: id },
-		dataType: "json",
-		type: "POST",
-		success: function (data) {
-			// console.log(data);
-			$("#patientId").val(data.id).prop("readonly", true);
-			$("#datetime").val(data.date).prop("readonly", true);
-		},
-	});
-
+	alert(id);
+	$("#patientId").val(id);
+	var currentDate = new Date();
+	var formattedDate =
+		currentDate.getFullYear() +
+		"-" +
+		padNumber(currentDate.getMonth() + 1) +
+		"-" +
+		padNumber(currentDate.getDate()) +
+		" " +
+		padNumber(currentDate.getHours()) +
+		":" +
+		padNumber(currentDate.getMinutes()) +
+		":" +
+		padNumber(currentDate.getSeconds());
+	$("#datetime").val(formattedDate);
 	$("#billModal").modal("show");
 });
+
+function padNumber(number) {
+	return (number < 10 ? "0" : "") + number;
+}
 
 // add button clone and remove button and all the mathematical calculation
 $(document).ready(function () {
 	var rowCounter = 1; // Counter variable for generating unique IDs
-	// toggleRemoveButton();
-
+	$("#form").validate();
 	$(document).on("click", ".addRowBtn", function () {
 		var lastRow = $("table tbody tr:last");
 		var newRow = lastRow.clone();
+
+		newRow.addClass("cloned-row");
 
 		// Generate a unique ID for the new row
 		var newRowId = "row" + rowCounter;
@@ -426,6 +452,28 @@ $(document).ready(function () {
 
 		newRow.find("input").val(""); // Clear input values in the new row
 		lastRow.after(newRow); // Append the new row after the last row
+
+		// Apply validation to the cloned row fields
+		newRow.find(".testItems").rules("add", {
+			required: true,
+			messages: {
+				required: "Test Items field is required",
+			},
+		});
+
+		newRow.find(".quantity").rules("add", {
+			required: true,
+			messages: {
+				required: "Quantity field is required",
+			},
+		});
+
+		newRow.find(".unitPrice").rules("add", {
+			required: true,
+			messages: {
+				required: "Unit Price field is required",
+			},
+		});
 
 		// Hide the "Add" button in the previous row
 		lastRow.find(".addRowBtn").hide();
@@ -448,25 +496,34 @@ $(document).ready(function () {
 		$("table tbody tr:last .addRowBtn").show();
 	});
 
-	// Keyup event for calculating price
-	$(document).on("keyup", "input.quantity, #unitPrice", function () {
-		var row = $(this).closest("tr");
-		var quantity = parseFloat(row.find(".quantity").val());
-		var unitPrice = parseFloat(row.find(".unitPrice").val());
-		if (!isNaN(quantity) && !isNaN(unitPrice)) {
-			var price = quantity * unitPrice;
-			row.find(".price").val(price.toFixed(2));
-		}
-		calculateTotal();
+	$("#billModal").on("hidden.bs.modal", function () {
+		// Clear and remove the cloned rows
+		$(".cloned-row").remove();
+		$("table tbody tr:last .addRowBtn").show();
+		$(".cloned-row").find("input").val("");
 	});
 
-	// Event handler for keyup event on discount percent input
-	$("#DiscountPercent").on("keyup", function () {
-		calculateTotal();
-	});
+	// Keyup event for calculating price
+	$(document).on(
+		"keyup",
+		"input.quantity, #unitPrice, #DiscountPercent",
+		function () {
+			var row = $(this).closest("tr");
+			var quantity = parseFloat(row.find(".quantity").val());
+			var unitPrice = parseFloat(row.find(".unitPrice").val());
+			var discountPercent = parseFloat($("#DiscountPercent").val());
+
+			if (!isNaN(quantity) && !isNaN(unitPrice)) {
+				var price = quantity * unitPrice;
+				row.find(".price").val(price.toFixed(2));
+			}
+
+			calculateTotal(discountPercent);
+		}
+	);
 });
 
-function calculateTotal() {
+function calculateTotal(discountPercent) {
 	var subTotal = 0;
 
 	$("input.price").each(function () {
@@ -476,8 +533,11 @@ function calculateTotal() {
 		}
 	});
 
-	var discountPercent = parseFloat($("#DiscountPercent").val());
-	var discountAmount = subTotal * (discountPercent / 100);
+	var discountAmount = 0;
+	if (!isNaN(discountPercent)) {
+		discountAmount = subTotal * (discountPercent / 100);
+	}
+
 	var netTotal = subTotal - discountAmount;
 
 	$("#subTotal").val(subTotal.toFixed(2));
@@ -497,11 +557,7 @@ $(document).on("click", "#saveTestItems", function (e) {
 			return $(this).val();
 		})
 		.get();
-	// .join("");
-	if (
-		testItems.length === 0 ||
-		testItems.filter((item) => item.trim() !== "").length === 0
-	) {
+	if (testItems.length === 0 || testItems.some((item) => item.trim() === "")) {
 		toastr.error("Please enter a Test Items");
 		return;
 	}
@@ -511,19 +567,18 @@ $(document).on("click", "#saveTestItems", function (e) {
 			return $(this).val();
 		})
 		.get();
-	// .join("");
 
-	if (quantity == "") {
+	if (quantity.some((val) => val === "")) {
 		toastr.error("Please enter a Quantity");
 		return;
 	}
+
 	var unitPrice = $("input[name='unitPrice[]']")
 		.map(function () {
 			return $(this).val();
 		})
 		.get();
-	// .join("");
-	if (unitPrice === "") {
+	if (unitPrice.some((val) => val === "")) {
 		toastr.error("Please enter a Unit price");
 		return;
 	}
@@ -532,31 +587,17 @@ $(document).on("click", "#saveTestItems", function (e) {
 			return $(this).val();
 		})
 		.get();
-	// .join("");
-	if (price === "") {
+	if (price.some((val) => val == "")) {
 		toastr.error("Please enter a price");
 		return;
 	}
 	var discountPercentage = $("#DiscountPercent").val();
 	if (!discountPercentage) {
-		toastr.error("Please enter a Discount percentage between 0 and 100");
-		return;
+		$("#DiscountPercent").val(0);
 	}
 	var discountAmount = $("#DiscountAmount").val();
 	var subTotal = $("#subTotal").val();
 	var netTotal = $("#netTotal").val();
-
-	alert(id);
-	alert(billing_date);
-	alert(testItems);
-	alert(quantity);
-	alert(unitPrice);
-	alert(price);
-	alert(discountPercentage);
-	alert(discountAmount);
-	alert(subTotal);
-	alert(netTotal);
-	// console.log(quantity);
 
 	$.ajax({
 		url: "test/storeAll",
@@ -576,7 +617,12 @@ $(document).on("click", "#saveTestItems", function (e) {
 		},
 		success: function (response) {
 			console.log(response);
-			$("#billModal").modal("hide");
+			if (response.status === "success") {
+				toastr.success(response.message); // Show success message
+				$("#billModal").modal("hide");
+			} else {
+				toastr.error(response.message); // Show error message
+			}
 		},
 	});
 });
@@ -628,9 +674,9 @@ $(document).on("click", "#editBill", function (e) {
 		},
 	});
 });
-$("#staticBackdrop").on("hidden.bs.modal", function () {
-	$("#form")[0].reset();
+$(document).ready(function () {
+	$("#billModal").on("hidden.bs.modal", function () {
+		// Reset the form with id "form2"
+		$("#form2")[0].reset();
+	});
 });
-// $(document).ready(function () {});
-
-

@@ -35,16 +35,7 @@ class patientModel extends CI_Model {
             'datetime'=> date('Y-m-d H:i:s'),
         );
         $query = $this->db->insert('patients', $data);
-        if ($query) {
-            // The insert query was successful
-            $this->session->set_flashdata('success', 'Data inserted successfully.');
-            return;
-        } else {
-            // The insert query failed
-            $this->session->set_flashdata('error', 'Failed to insert data.');
-            return;
-        }
-        // return $query;
+        return $query;
     }
 
     public function getAllPatients() 

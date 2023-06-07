@@ -8,17 +8,20 @@
             <div class="border-bottom text-center">
                 <h2>Patient Information</h2>
             </div>
-            <?php if ($this->session->flashdata('success')): ?>
-                <div class="alert alert-success">
-                    <?php echo $this->session->flashdata('success'); ?>
-                </div>
-            <?php endif; ?>
 
-            <?php if ($this->session->flashdata('error')): ?>
-                <div class="alert alert-danger">
-                    <?php echo $this->session->flashdata('error'); ?>
-                </div>
-            <?php endif; ?>
+            <?php if ($this->session->flashdata('success')): ?>
+            <div class="alert alert-success">
+                <?php echo $this->session->flashdata('success'); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($this->session->flashdata('error')): ?>
+            <div class="alert alert-danger">
+                <?php echo $this->session->flashdata('error'); ?>
+            </div>
+        <?php endif; ?>
+
+        
             <table class="border border-bottom table table-bordered table-striped" id="user_data">
                 <thead>
                     <tr>
@@ -260,7 +263,6 @@
         </div>
     </div>
 
-
     <!-- BIlling and Register Modal HTML -->
     <div class="m-4">
         <div id="billModal" class="modal fade" data-bs-backdrop="static" tabindex="-1">
@@ -326,7 +328,7 @@
                         <div class="container mt-5">
                             <div class="row justify-content-end">
                                 <div class="col-sm-6">
-                                    <form>
+                                    <form id="form2">
                                         <div class="form-group row mb-3">
                                             <label for="inputEmail3" class="col-sm-4 col-form-label">Sub Total</label>
                                             <div class="col-sm-8">

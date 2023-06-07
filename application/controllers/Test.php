@@ -3,7 +3,21 @@ class Test extends CI_Controller
 {
     public function storeAll()
     {
+        
         $response = $this->test->storeTestData();
+        if($response)
+        {
+            $response = array(
+                'status' => 'success',
+                'message' => 'Record is successfully stored in the Billing Information',
+            );
+        }
+        else {
+            $response = array(
+                'status' => 'error',
+                'message' => 'Record could not be stored successfully',
+            );
+        }
         echo json_encode($response);
     }
 

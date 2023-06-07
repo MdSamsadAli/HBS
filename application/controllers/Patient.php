@@ -59,10 +59,24 @@ class Patient extends CI_Controller
 
         if($this->form_validation->run() == FALSE){
             // Form validation failed
-            $response = $this->session->set_flashdata('error','please enter a required field');
+            $response = array(
+                'status' => 'error',
+                'message' => 'Please enter a required field'
+            );
             echo json_encode($response);
         }else{
             $response = $this->patient->storeAllPatients();
+            if ($response) {
+                $response = array(
+                    'status' => 'success',
+                    'message' => 'Patient stored successfully'
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'message' => 'Failed to store patient'
+                );
+            }
             echo json_encode($response);
         }
 
@@ -80,16 +94,6 @@ class Patient extends CI_Controller
         $data = $this->patient->singleData($id);
         // var_dump($data);
         echo json_encode($data);
-    }
-
-    public function getPatientId()
-    {
-            date_default_timezone_set('Asia/Kathmandu'); // Set the timezone to Nepal
-            $id = $this->input->post('id');
-            $datetime = date("Y-m-d H:i:s");
-            $response['date'] = $datetime;
-            $response['id'] = $id;
-            echo json_encode($response);
     }
 }
 

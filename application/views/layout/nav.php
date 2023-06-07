@@ -7,14 +7,8 @@
                 </h2>
             </div>
             <div>
-
-            <style>
-                #listactive{
-                    background-color: red !important;
-                }
-            </style>
             <ul class="d-flex">
-                <li id="listactive">
+                <li>
                     <a id="registerBtn" class="navbar-brand" href="<?php base_url() ?>patient">Register</a>
                 </li>
                 <li>
