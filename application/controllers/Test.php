@@ -1,7 +1,7 @@
 <?php
 class Test extends CI_Controller
 {
-    public function storeAll()
+    public function storeTests()
     {
         
         $response = $this->test->storeTestData();

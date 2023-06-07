@@ -81,13 +81,13 @@ class Patient extends CI_Controller
         }
 
     }
-    public function getAll()
+    public function getPatients()
     {
         $response = $this->patient->getAllPatients();
         echo json_encode($response);
     }
 
-    public function editPatients()
+    public function editPatient()
     {
         $id = $this->input->post('id');
         // var_dump($id);

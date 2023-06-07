@@ -66,13 +66,22 @@ class patientModel extends CI_Model {
         return $query->result_array();
     }
     public function billingData($id){
-        $this->db->select("billing.*, patients.name, tests.test_items, tests.quantity, tests.unit_price, tests.price");
+        
+        $this->db->select("billing.patient_id, billing.id, billing.sub_total, billing.discount_amount, billing.net_total, patients.name");
         $this->db->from('billing');
         $this->db->join('patients', 'billing.patient_id = patients.patientid');
-        $this->db->join('tests', 'billing.id = tests.sample_id');
         $this->db->where('billing.id', $id);
         $query = $this->db->get();
-        $result = $query->result_array();
+        $result_row = $query->row();
+
+        $this->db->select("tests.test_items, tests.quantity, tests.unit_price, tests.price");
+        $this->db->from('tests');
+        $this->db->where('tests.sample_id', $id);
+        $query = $this->db->get();
+        $result_array = $query->result_array();
+
+        $result = (array)$result_row;
+        $result = array_merge($result, $result_array);
 
         return $result;
     }

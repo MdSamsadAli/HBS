@@ -233,7 +233,7 @@ var dataTable;
 // get all patients from the database
 function getPatients() {
 	$.ajax({
-		url: "patient/getAll",
+		url: "patient/getPatients",
 		type: "POST",
 		dataType: "json",
 		success: function (response) {
@@ -284,7 +284,7 @@ $(document).on("click", "#edit", function (e) {
 	// alert(id);
 
 	$.ajax({
-		url: "patient/editPatients",
+		url: "patient/editPatient",
 		dataType: "json",
 		type: "POST",
 		data: { id: id },
@@ -615,7 +615,7 @@ $(document).on("click", "#saveTestItems", function (e) {
 	var netTotal = $("#netTotal").val();
 
 	$.ajax({
-		url: "test/storeAll",
+		url: "test/storeTests",
 		dataType: "json",
 		type: "POST",
 		data: {
@@ -655,7 +655,7 @@ $("#billModal").on("hidden.bs.modal", function () {
 $(document).on("click", "#editBill", function (e) {
 	e.preventDefault();
 	var id = $(this).attr("value");
-	// alert(id);
+	alert(id);
 
 	$.ajax({
 		url: "test/editBill",
@@ -664,10 +664,10 @@ $(document).on("click", "#editBill", function (e) {
 		data: { id: id },
 		success: function (data) {
 			console.log(data);
-			$("#patient_id").text(data[0].patient_id);
-			$("#name").text(data[0].name);
-			$("#date").text(data[0].billing_date);
-			$("#billno").text(data[0].id);
+			$("#patient_id").text(data.patient_id);
+			$("#name").text(data.name);
+			$("#date").text(data.billing_date);
+			$("#billno").text(data.id);
 
 			var tableBody = $("#invoice_data");
 			tableBody.empty();
@@ -681,9 +681,9 @@ $(document).on("click", "#editBill", function (e) {
 			});
 
 			// Update other HTML elements with relevant data
-			$("#subTotal").text(data[0].sub_total);
-			$("#discount").text(data[0].discount_amount);
-			$("#netTotal").text(data[0].net_total);
+			$("#subTotal").text(data.sub_total);
+			$("#discount").text(data.discount_amount);
+			$("#netTotal").text(data.net_total);
 
 			// $(document).off("click", "#editBill");
 		},
