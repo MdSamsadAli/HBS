@@ -136,11 +136,18 @@ $(document).on("click", "#storerecord", function (e) {
 		toastr.error("Please enter a phonenumber");
 		return;
 	}
-	// // Check if phone number has exactly 10 digits
-	// if (phonenumber.length !== 10 || isNaN(phonenumber)) {
-	// 	toastr.error("Phone number must contain exactly 10 digits only numbers");
-	// 	return;
-	// }
+	// Check if phone number has exactly 10 digits
+	if (phonenumber.length !== 10 || isNaN(phonenumber)) {
+		toastr.error("Phone number must contain exactly 10 digits only numbers");
+		return;
+	}
+
+	if (!/^[9]\d{9}$/.test(phonenumber)) {
+		toastr.error(
+			"Phone number must start with 9 and contain exactly 10 digits."
+		);
+		return;
+	}
 
 	if (age.trim() === "") {
 		toastr.error("Please enter a age");
