@@ -54,13 +54,9 @@ class TestModel extends CI_Model
         } catch (Exception $e) {
             // Rollback the transaction if an error occurs
             $this->db->trans_rollback();
-            
-            // Handle the error appropriately
-            // Log or handle the error appropriately
-            $errorMessage = $e->getMessage();
-            
+
             // Return error message
-            return 'Transaction failed: ' . $errorMessage;
+            return 'Transaction failed';
         }
     }
 }
