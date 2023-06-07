@@ -34,17 +34,20 @@ class TestModel extends CI_Model
             $id = $this->db->insert_id();
             
             // Insert data into the "tests" table within the transaction
+            $batchData = [];
             for ($i = 0; $i < count($testItems); $i++) {
-                $this->db->insert('tests', [
+                $batchData[] = [
                     'sample_id' => $id,
                     'patient_id' => $patientId,
                     'test_items' => $testItems[$i],
                     'quantity' => $quantities[$i],
                     'unit_price' => $unitPrices[$i],
                     'price' => $prices[$i]
-                ]);
+                ];
             }
-            
+            // Batch insert data into the "tests" table within the transaction
+            $this->db->insert_batch('tests', $batchData);
+
             // Commit the transaction if all operations are successful
             $this->db->trans_commit();
             

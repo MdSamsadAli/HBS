@@ -34,9 +34,24 @@ $(document).ready(function () {
 
 		// Remove any numeric characters
 		name = name.replace(/[^A-Za-z]/g, " ");
+		name = name.replace(/\s+/g, " ");
+		name = name.slice(0, 16);
 
 		// Update the value of the name field
 		$(this).val(name);
+	});
+
+	// Listen to the input event on the name field
+	$("#address").on("input", function () {
+		var address = $(this).val();
+
+		// Remove any numeric characters
+		address = address.replace(/[^A-Za-z0-9]/g, " ");
+		address = address.replace(/\s+/g, " ");
+		address = address.slice(0, 20);
+
+		// Update the value of the address field
+		$(this).val(address);
 	});
 	// Listen to the input event on the name field
 	$(document).on("input", "#testItems", function () {
@@ -410,7 +425,7 @@ $("#district").change(function () {
 $(document).on("click", "#billing", function (e) {
 	e.preventDefault();
 	var id = $(this).attr("value");
-	alert(id);
+	// alert(id);
 	$("#patientId").val(id);
 	var currentDate = new Date();
 	var formattedDate =
