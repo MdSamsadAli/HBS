@@ -108,7 +108,7 @@
               </div>
             </div>
             <div class="d-flex justify-content-end mt-4">
-              <a href="#" class="btn btn-primary btn-sm">Print</a>
+              <a href="#" class="btn btn-primary btn-sm" id="printBtn">Print</a>
             </div>
           </div>
         </form>

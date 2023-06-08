@@ -67,7 +67,7 @@ class patientModel extends CI_Model {
     }
     public function billingData($id){
         
-        $this->db->select("billing.patient_id, billing.id, billing.sub_total, billing.discount_amount, billing.net_total, patients.name");
+        $this->db->select("billing.patient_id, billing.id,  billing.billing_date, billing.sub_total, billing.discount_amount, billing.net_total, patients.name");
         $this->db->from('billing');
         $this->db->join('patients', 'billing.patient_id = patients.patientid');
         $this->db->where('billing.id', $id);

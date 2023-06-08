@@ -702,3 +702,9 @@ $(document).ready(function () {
 		$("#form2")[0].reset();
 	});
 });
+
+$(document).ready(function () {
+	$("#printBtn").click(function () {
+		window.print();
+	});
+});
