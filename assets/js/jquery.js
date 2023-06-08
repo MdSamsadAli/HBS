@@ -58,7 +58,7 @@ $(document).ready(function () {
 		var testItems = $(this).val();
 
 		// Remove any numeric characters
-		testItems = testItems.replace(/[^A-Za-z0-9]/g, " ");
+		testItems = testItems.replace(/[^A-Za-z0-9^-]/g, " ");
 		testItems = testItems.slice(0, 20);
 		testItems = testItems.replace(/\s+/g, " ");
 
@@ -662,7 +662,7 @@ $("#billModal").on("hidden.bs.modal", function () {
 $(document).on("click", "#editBill", function (e) {
 	e.preventDefault();
 	var id = $(this).attr("value");
-	alert(id);
+	// alert(id);
 
 	$.ajax({
 		url: "test/editBill",
